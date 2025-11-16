@@ -1,0 +1,91 @@
+html, body {
+    height: 100%;       /* Ocupa toda la altura */
+    margin: 0;          /* Sin márgenes */
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;            /* Empuja el footer hacia abajo */
+}
+
+footer {
+    background: #222;
+    color: #fff;
+    padding: 15px;
+    text-align: center;
+}
+
+
+.btn_general {
+    display: inline-block;
+    padding: 12px 25px;
+    background: linear-gradient(135deg, #4a4a4a, #222);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Hover */
+.btn_general:hover {
+    background: linear-gradient(135deg, #5c5c5c, #333);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+/* Active (clic) */
+.btn_general:active {
+    transform: translateY(0px);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+}
+
+/* Para botones tipo <button> */
+button.btn_general {
+    appearance: none; /* elimina estilos por defecto */
+}
+
+
+/* ===== Botón rojo elegante para volver ===== */
+.btn-rojo {
+    display: inline-block;
+    padding: 12px 25px;
+    background: linear-gradient(135deg, #d64b4b, #a02020);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Hover */
+.btn-rojo:hover {
+    background: linear-gradient(135deg, #e35a5a, #b02828);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+/* Active */
+.btn-rojo:active {
+    transform: translateY(0px);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+}
+
+/* Para <button> */
+button.btn-rojo {
+    appearance: none;
+}
