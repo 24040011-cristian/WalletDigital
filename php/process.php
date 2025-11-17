@@ -89,6 +89,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    // Agregar Tarjeta
+    if($accion === 'addCard') {
+        $cardNumber = trim($_POST['cardNumber'] ?? '');
+        $bank = trim($_POST['bank'] ?? '');
+        $fechaRegistro = trim($_POST['fechaRegistro'] ?? '');
+        $saldo = trim($_POST['saldo'] ?? '');
+
+        if (empty($cardNumber) || empty($bank) || empty($fechaRegistro) || empty($saldo)) {
+            echo "Por favor, complete todos los campos.";
+            exit;
+        }
+
+        $userId = $_SESSION['id'];
+
+        $sql = "INSERT INTO tarjetas (numeroTarjeta, banco, fechaRegistro, saldo, idUsuario) VALUES (:cardNumber, :bank, :fechaRegistro, :saldo, :userId)";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':cardNumber', $cardNumber);
+        $stmt->bindParam(':bank', $bank);
+        $stmt->bindParam(':fechaRegistro', $fechaRegistro);
+        $stmt->bindParam(':saldo', $saldo);
+        $stmt->bindParam(':userId', $userId);
+        $stmt->execute();
+
+        header("Location: /walletDigital/myCards.php");
+        exit;
+    }
 
 
 }

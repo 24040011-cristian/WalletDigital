@@ -8,7 +8,8 @@
         
         <link rel="stylesheet" href="/walletDigital/src/css/style.css">
         <link rel="stylesheet" href="/walletDigital/src/css/form.css">
-        <link rel="stylesheet" href="/walletDigital/src/css/navbar.css">';
+        <link rel="stylesheet" href="/walletDigital/src/css/navbar.css">
+        <link rel="stylesheet" href="/walletDigital/src/css/cards.css">';
     }
 
     // Footer
