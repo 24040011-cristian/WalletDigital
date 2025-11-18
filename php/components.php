@@ -18,6 +18,8 @@
     <p>&copy; 2025 Wallet Digital | Todos los derechos reservados</p>
   </footer>
         ';
+    echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
+    include __DIR__ . '/alerts.php';
     }
 
     // Verificar si el usuario ha iniciado sesión

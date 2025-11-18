@@ -27,17 +27,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $_SESSION['nombre_completo'] = $user['nombreCompleto'];
                     $_SESSION['usuario'] = $user['usuario'];
 
+                    $_SESSION['alert'] = ['type' => 'success', 'msg' => 'Bienvenido, ' . htmlspecialchars($user['nombreCompleto']) . '!'];
                     header('Location: /walletDigital/myCards.php');
                     exit;
                 } else {
-                    echo 'Credenciales inválidas.';
+                    $_SESSION['alert'] = ['type' => 'error', 'msg' => 'Usuario o contraseña incorrectos.'];
+                    header("Location: login.php");
+                    exit;
                 }
 
             } catch (PDOException $e) {
                 echo 'Error en la conexión: ' . $e->getMessage();
             }
         } else {
-            echo 'Por favor, complete todos los campos.';
+            $_SESSION['alert'] = ['type' => 'error', 'msg' => 'Por favor, complete todos los campos.'];
+            header("Location: login.php");
         }
     }
 
@@ -58,18 +62,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $password = trim($_POST['password'] ?? '');
 
         if (empty($name) || empty($username) || empty($email) || empty($password)) {
-            echo "Por favor, complete todos los campos.";
+            $_SESSION['alert'] = ['type' => 'error', 'msg' => 'Por favor, complete todos los campos.'];
+            header("Location: signup.php");
             exit;
         }
 
         $imageData = null;
+        $maxSize = 2 * 1024 * 1024;
 
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-            $imgInfo = getimagesize($_FILES['image']['tmp_name']);
-            if ($imgInfo === false) {
-                echo "El archivo no es una imagen válida.";
+
+            if ($_FILES['image']['size'] > $maxSize) {
+                $_SESSION['alert'] = ['type' => 'error', 'msg' => 'La imagen es demasiado grande. Máximo permitido: 2MB'];
+                header("Location: /walletDigital/php/signup.php");
                 exit;
             }
+
+            $imgInfo = getimagesize($_FILES['image']['tmp_name']);
+            if ($imgInfo === false) {
+                $_SESSION['alert'] = ['type' => 'error', 'msg' => 'El archivo no es una imagen válida.'];
+                header("Location: signup.php");
+                exit;
+            }
+            
             $imageData = file_get_contents($_FILES['image']['tmp_name']);
         }
 
@@ -85,6 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindParam(':image', $imageData, PDO::PARAM_LOB);
         $stmt->execute();
 
+        $_SESSION['alert'] = ['type' => 'success', 'msg' => 'Nuevo usuario agregado correctamente'];
         header("Location: login.php");
         exit;
     }
@@ -97,7 +113,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $saldo = trim($_POST['saldo'] ?? '');
 
         if (empty($cardNumber) || empty($bank) || empty($fechaRegistro) || empty($saldo)) {
-            echo "Por favor, complete todos los campos.";
+            $_SESSION['alert'] = ['type' => 'error', 'msg' => 'Por favor, complete todos los campos.'];
+            header("Location: /walletDigital/php/addCards.php");
             exit;
         }
 
@@ -113,6 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindParam(':userId', $userId);
         $stmt->execute();
 
+        $_SESSION['alert'] = ['type' => 'success', 'msg' => 'Tarjeta agregada correctamente'];
         header("Location: /walletDigital/myCards.php");
         exit;
     }
@@ -124,16 +142,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email = trim($_POST['email'] ?? '');
 
         if (empty($name) || empty($username) || empty($email)) {
-            echo "Por favor, complete todos los campos.";
+            $_SESSION['alert'] = ['type' => 'error', 'msg' => 'Por favor, complete todos los campos.'];
             exit;
         }
 
         $imageData = null;
+        $maxSize = 2 * 1024 * 1024;
 
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+
+            if ($_FILES['image']['size'] > $maxSize) {
+                $_SESSION['alert'] = ['type' => 'error', 'msg' => 'La imagen es demasiado grande. Máximo permitido: 2MB'];
+                header("Location: /walletDigital/php/profileEdit.php");
+                exit;
+            }
+
             $imgInfo = getimagesize($_FILES['image']['tmp_name']);
             if ($imgInfo === false) {
-                echo "El archivo no es una imagen válida.";
+                $_SESSION['alert'] = ['type' => 'error', 'msg' => 'El archivo no es una imagen válida.'];
+                header("Location: /walletDigital/php/profileEdit.php");
                 exit;
             }
             $imageData = file_get_contents($_FILES['image']['tmp_name']);
@@ -157,6 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindParam(':userId', $userId);
         $stmt->execute();
 
+        $_SESSION['alert'] = ['type' => 'success', 'msg' => 'Perfil actualizado correctamente'];
         header("Location: /walletDigital/php/profileView.php");
         exit;
     }
@@ -164,13 +192,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Editar Tarjeta
     if ($accion === 'editCard') {
         $idTarjeta = $_POST['idTarjeta'];
-    $saldo = $_POST['saldo'];
+        $saldo = $_POST['saldo'];
 
-    $sql = $pdo->prepare("UPDATE tarjetas SET saldo = :saldo WHERE idTarjeta = :id");
-    $sql->execute([":saldo" => $saldo, ":id" => $idTarjeta]);
+        $sql = $pdo->prepare("UPDATE tarjetas SET saldo = :saldo WHERE idTarjeta = :id");
+        $sql->execute([":saldo" => $saldo, ":id" => $idTarjeta]);
 
-    header("Location: /walletDigital/myCards.php");
-    exit;
+        $_SESSION['alert'] = ['type' => 'success', 'msg' => 'Datos actualizados correctamente'];
+        header("Location: /walletDigital/myCards.php");
+        exit;
     }
 
     // Eliminar Tarjeta
@@ -180,6 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sql = $pdo->prepare("DELETE FROM tarjetas WHERE idTarjeta = :id");
         $sql->execute([":id" => $idTarjeta]);
 
+        $_SESSION['alert'] = ['type' => 'success', 'msg' => 'Tarjeta eliminada correctamente'];
         header("Location: /walletDigital/myCards.php");
         exit;
     }

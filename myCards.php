@@ -34,16 +34,18 @@
     </main>
 
     <div id="modalCard" class="modal hidden">
-    <div class="modal-content">
+    <div class="form-card">
 
-        <h3>Editar Tarjeta</h3>
+        <h2>Editar Tarjeta</h2>
 
         <form id="formEditCard" method="POST" action="/walletDigital/php/process.php">
             <input type="hidden" name="accion" value="editCard">
             <input type="hidden" name="idTarjeta" id="idTarjeta">
 
-            <label>Saldo:</label>
-            <input type="number" step="0.01" name="saldo" id="saldo" required>
+            <div class="form-group">
+                <label>Saldo</label>
+                <input type="number" step="0.01" name="saldo" id="saldo" required>
+            </div>
 
             <div class="modal-buttons">
                 <button type="submit" class="btn_general">Guardar cambios</button>
