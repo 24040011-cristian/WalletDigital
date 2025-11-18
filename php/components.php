@@ -8,8 +8,7 @@
         
         <link rel="stylesheet" href="/walletDigital/src/css/style.css">
         <link rel="stylesheet" href="/walletDigital/src/css/form.css">
-        <link rel="stylesheet" href="/walletDigital/src/css/navbar.css">
-        <link rel="stylesheet" href="/walletDigital/src/css/cards.css">';
+        <link rel="stylesheet" href="/walletDigital/src/css/navbar.css">';
     }
 
     // Footer
@@ -69,6 +68,7 @@
             <div class="action-section">
                 <a href="/walletDigital/myCards.php" class="btn_general">Mis Tarjetas</a>
                 <a href="/walletDigital/php/addCards.php" class="btn_general">Agregar Tarjetas</a>
+                <a href="/walletDigital/php/profileView.php" class="btn_general">Perfil</a>
 
                 <form action="/walletDigital/php/process.php" method="POST" class="logout-form">
                     <input type="hidden" name="accion" value="logout">
@@ -78,4 +78,24 @@
         </div>';
     }
 
+    function getProfileData()
+    {
+        require __DIR__ . '/conection.php';
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['id'])) {
+            header('Location: /walletDigital/php/login.php');
+            exit;
+        }
+
+        $userId = $_SESSION['id'];
+
+        $sql = $pdo->prepare("SELECT nombreCompleto, usuario, correo, imagenUsuario FROM usuario WHERE idUsuario = :id LIMIT 1");
+        $sql->bindParam(':id', $userId);
+        $sql->execute();
+
+        return $sql->fetch(PDO::FETCH_ASSOC);
+    }
 ?>

@@ -5,7 +5,7 @@ require_once "conection.php";
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $accion = $_POST['accion'] ?? '';
 
-    // Iniciar Sesion
+    // Iniciar Sesion 
     if ($accion === 'login') {
         $userInput = trim($_POST['usernameOrEmail'] ?? '');
         $password  = trim($_POST['password'] ?? '');
@@ -117,5 +117,72 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    // Editar Perfil
+    if ($accion === 'profileEdit') {
+        $name = trim($_POST['name'] ?? '');
+        $username = trim($_POST['username'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+
+        if (empty($name) || empty($username) || empty($email)) {
+            echo "Por favor, complete todos los campos.";
+            exit;
+        }
+
+        $imageData = null;
+
+        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $imgInfo = getimagesize($_FILES['image']['tmp_name']);
+            if ($imgInfo === false) {
+                echo "El archivo no es una imagen válida.";
+                exit;
+            }
+            $imageData = file_get_contents($_FILES['image']['tmp_name']);
+        }
+
+        $userId = $_SESSION['id'];
+
+        if ($imageData !== null) {
+            $sql = "UPDATE usuario SET nombreCompleto = :name, usuario = :username, correo = :email, imagenUsuario = :image WHERE idUsuario = :userId";
+        } else {
+            $sql = "UPDATE usuario SET nombreCompleto = :name, usuario = :username, correo = :email WHERE idUsuario = :userId";
+        }
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':email', $email);
+        if ($imageData !== null) {
+            $stmt->bindParam(':image', $imageData, PDO::PARAM_LOB);
+        }
+        $stmt->bindParam(':userId', $userId);
+        $stmt->execute();
+
+        header("Location: /walletDigital/php/profileView.php");
+        exit;
+    }
+
+    // Editar Tarjeta
+    if ($accion === 'editCard') {
+        $idTarjeta = $_POST['idTarjeta'];
+    $saldo = $_POST['saldo'];
+
+    $sql = $pdo->prepare("UPDATE tarjetas SET saldo = :saldo WHERE idTarjeta = :id");
+    $sql->execute([":saldo" => $saldo, ":id" => $idTarjeta]);
+
+    header("Location: /walletDigital/myCards.php");
+    exit;
+    }
+
+    // Eliminar Tarjeta
+    if ($accion === 'DeleteCard') {
+         $idTarjeta = $_POST['idTarjeta'];
+
+        $sql = $pdo->prepare("DELETE FROM tarjetas WHERE idTarjeta = :id");
+        $sql->execute([":id" => $idTarjeta]);
+
+        header("Location: /walletDigital/myCards.php");
+        exit;
+    }
 
 }
+?>

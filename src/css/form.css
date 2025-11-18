@@ -136,3 +136,27 @@
     background-position: right 12px center;
     background-size: 18px;
 }
+
+ /* Modals */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 25px;
+    width: 350px;
+    border-radius: 10px;
+}
