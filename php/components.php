@@ -1,5 +1,5 @@
 <?php
-    // Cabecera HTML
+    // Header
     function headContent($title) {
         echo '<meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +8,9 @@
         
         <link rel="stylesheet" href="/walletDigital/src/css/style.css">
         <link rel="stylesheet" href="/walletDigital/src/css/form.css">
-        <link rel="stylesheet" href="/walletDigital/src/css/navbar.css">';
+        <link rel="stylesheet" href="/walletDigital/src/css/navbar.css">
+
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">';
     }
 
     // Footer
@@ -25,6 +27,7 @@
     // Verificar si el usuario ha iniciado sesión
     function userLogged() {
         require __DIR__ . '/conection.php';
+        // Iniciar sesión si no está iniciada
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -80,8 +83,8 @@
         </div>';
     }
 
-    function getProfileData()
-    {
+    // Obtener datos del perfil
+    function getProfileData() {
         require __DIR__ . '/conection.php';
         if (session_status() === PHP_SESSION_NONE) {
             session_start();

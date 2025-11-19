@@ -58,7 +58,7 @@
                     </div>
 
                     <button class="btn_general" type="submit">Guardar</button>
-                    <button class="btn-rojo" onclick="window.history.go(-1)">Regresar</button>
+                    <button class="btn-rojo" onclick="history.back()">Regresar</button>
 
                 </form>
             </div>

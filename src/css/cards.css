@@ -18,7 +18,6 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
     position: relative;
     overflow: hidden;
 }
@@ -28,7 +27,6 @@
     transform: scale(1.03);
 }
 
-/* Colores de bancos */
 .bbva       { background: #0055a5; }
 .santander  { background: #ec0000; }
 .banorte    { background: #a00000; }

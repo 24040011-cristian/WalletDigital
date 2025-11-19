@@ -2,6 +2,7 @@
 session_start();
 require_once "conection.php";
 
+// Procesa las acciones enviadas por formularios
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $accion = $_POST['accion'] ?? '';
 
@@ -143,6 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (empty($name) || empty($username) || empty($email)) {
             $_SESSION['alert'] = ['type' => 'error', 'msg' => 'Por favor, complete todos los campos.'];
+            header("Location: /walletDigital/php/profileEdit.php");
             exit;
         }
 
